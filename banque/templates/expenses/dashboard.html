@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block content %}
+    <div class="container mt-5">
+        <h1 class="mb-4 text-center">Tableau de bord administratif</h1>
+
+        <div class="row">
+            <!-- Statistiques -->
+            <div class="col-md-6">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h3 class="card-title">Statistiques</h3>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group">
+                            <li class="list-group-item">Total des clients : <strong>{{ total_clients }}</strong></li>
+                            <li class="list-group-item">Total des comptes : <strong>{{ total_comptes }}</strong></li>
+                            <li class="list-group-item">Comptes Courants : <strong>{{ comptes_data.courant_count }} comptes</strong></li>
+                            <li class="list-group-item">Comptes d'épargne : <strong>{{ comptes_data.epargne_count }} comptes</strong></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Graphiques -->
+            <div class="col-md-6">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h3 class="card-title">Graphiques</h3>
+                    </div>
+                    <div class="card-body text-center">
+                        <!-- Graphique circulaire pour la répartition des types de comptes -->
+                        <canvas id="chart1" width="300" height="300"></canvas> <!-- Taille réduite -->
+                        <hr>
+                        <!-- Graphique des comptes et clients totaux -->
+                        <canvas id="chart2" width="400" height="200"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CDN Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        // S'assurer que les variables JavaScript reçoivent bien les données
+        var ctx1 = document.getElementById('chart1').getContext('2d');
+        var ctx2 = document.getElementById('chart2').getContext('2d');
+
+        // Graphique circulaire pour la répartition des types de comptes
+        new Chart(ctx1, {
+            type: 'pie',
+            data: {
+                labels: ['Comptes Courants', 'Comptes d\'épargne'],
+                datasets: [{
+                    data: [{{ comptes_data.courant_count }}, {{ comptes_data.epargne_count }}],
+                    backgroundColor: ['#42A5F5', '#66BB6A'],  // Couleurs plus professionnelles
+                    hoverOffset: 4
+                }]
+            }
+        });
+
+        // Graphique des comptes et clients totaux
+        new Chart(ctx2, {
+            type: 'bar',
+            data: {
+                labels: ['Clients', 'Comptes'],
+                datasets: [{
+                    label: 'Nombre',
+                    data: [{{ total_clients }}, {{ total_comptes }}],
+                    backgroundColor: ['#FF7043', '#8D6E63'], // Couleurs attrayantes mais professionnelles
+                    borderColor: ['#FF3D00', '#6D4C41'],
+                    borderWidth: 1
+                }]
+            }
+        });
+    </script>
+{% endblock %}

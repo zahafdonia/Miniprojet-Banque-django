@@ -1,0 +1,73 @@
+{% extends "base_client.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10 col-sm-12">
+            {% include 'parties/-messages.html' %}
+            {% csrf_token %}
+            
+            <div class="card shadow-lg border-0 mb-4">
+                <div class="card-header bg-primary text-white text-center">
+                    <h1 class="mb-0">Bienvenue, {{ client.firstname }} {{ client.lastname }}</h1>
+                </div>
+                
+                <div class="card shadow-lg border-0 mb-4">
+                    <div class="card-body text-center">
+                        <p><strong>Nombre total de comptes :</strong> <span class="badge bg-info">{{ nombre_comptes }}</span></p>
+                        <p><strong>Solde total de tous les comptes :</strong> <span class="badge bg-warning">{{ total_solde }} DT</span></p>
+                    </div>
+                </div>
+
+                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+                <!-- Section Graphique -->
+
+
+                
+                <div class="card shadow-lg border-0 mb-4">
+                    <div class="card-header bg-dark text-white text-center">
+                        <h4>Mes Comptes</h4>
+                    </div>
+
+                    <div class="card-body">
+                        <table class="table table-bordered table-striped table-hover">
+                            <thead class="bg-secondary text-white">
+                                <tr>
+                                    <th scope="col">Identifiant</th>
+                                    <th scope="col">Type</th>
+                                    <th scope="col">Solde</th>
+                                    <th scope="col" class="text-center">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for compte in comptes %}
+                                    <tr>
+                                        <td>{{ compte.identifiant }}</td>
+                                        <td>{{ compte.type }}</td>
+                                        <td>{{ compte.solde }} DT</td>
+                                        <td class="text-center">
+                                            <!-- Historique -->
+                                            <a href="{% url 'historique-transactions' compte.id %}" class="btn btn-sm btn-secondary">
+                                                <i class="fas fa-file-alt"></i> Historique
+                                            </a>
+                                            <!-- Versement -->
+                                            <a href="{% url 'versement-dargent' compte.id %}" class="btn btn-sm btn-success">
+                                                <i class="fas fa-plus-circle"></i> Verser
+                                            </a>
+                                            <!-- Retrait -->
+                                            <a href="{% url 'retrait-dargent' compte.id %}" class="btn btn-sm btn-info">
+                                                <i class="fas fa-minus-circle"></i> Retrait d’argent
+                                            </a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div> 
+        </div>
+    </div>
+</div>
+{% endblock %}

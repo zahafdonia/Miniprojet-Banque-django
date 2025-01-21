@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h3 class="mb-4 text-center">Liste des Comptes</h3>
+
+    <!-- Vérification des messages -->
+    {% if messages %}
+        <div class="alert alert-info">
+            {% for message in messages %}
+                {{ message }}
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <!-- Table des comptes -->
+    <div class="card">
+        <div class="card-body">
+            <table class="table table-bordered table-hover">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Identifiant</th>
+                        <th scope="col">Client</th>
+                        <th scope="col">Type</th>
+                        <th scope="col">Solde (DT)</th>
+                        <th scope="col">Date d'ouverture</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for compte in comptes %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ compte.identifiant }}</td>
+                            <td>{{ compte.client.firstname }} {{ compte.client.lastname }}</td>
+                            <td>{{ compte.get_type_display }}</td> 
+                            <td>{{ compte.solde }}</td>
+                            <td>{{ compte.date_ouverture|date:"d/m/Y H:i" }}</td>
+                            <td>
+                                <div class="d-flex justify-content-around">
+                                    <a href="{% url 'delete-account' compte.identifiant %}" 
+                                       class="btn btn-danger btn-sm"
+                                       onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce compte ?');">
+                                        Supprimer
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="7" class="text-center text-muted">Aucun compte trouvé</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Bouton pour ajouter un nouveau compte -->
+    <div class="text-right mt-3">
+        <a href="{% url 'create-account' %}" class="btn btn-success">
+            <i class="bi bi-plus-circle"></i> Ajouter un compte
+        </a>
+    </div>
+</div>
+{% endblock %}

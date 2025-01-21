@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block content  %}
+
+<div class="container mt-4">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="{% url 'expenses'%}">Clients</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">Add Client</li>
+      </ol>
+    </nav>
+
+    <div class="card">
+        <div class="card-body">
+          <form action="{% url 'add-expenses' %}" method="post">
+            
+            {% include 'parties/-messages.html'%} {% csrf_token %}
+            <div class="form-group">
+              <label for="">username</label>
+              <input
+                type="text"
+                class="form-control form-control-sm"
+                name="username"
+                value="{{request.POST.username}}"
+              />
+            </div>
+            <div class="form-group">
+              <label for="">FirstName</label>
+              <input
+                type="text"
+                class="form-control form-control-sm"
+                name="FirstName"
+                value="{{request.POST.FirstName }}"
+              />
+            </div>
+            <div class="form-group">
+                <label for="">LastName</label>
+                <input
+                  type="text"
+                  class="form-control form-control-sm"
+                  name="LastName"
+                  value="{{request.POST.LastName}}"
+                />
+              
+            </div>
+            <div class="form-group">
+                <label for="">Email</label>
+                <input
+                  type="text"
+                  class="form-control form-control-sm"
+                  name="Email"
+                  value="{{request.POST.Email}}"
+                />
+              </div>
+              <div class="form-group">
+                <label for="password">Password</label>
+                <input
+                  type="password"
+                  class="form-control form-control-sm"
+                  name="Password"
+                  id="password"
+                  value="{{ request.POST.Password }}"
+                />
+              </div>
+    
+            <input
+              type="submit"
+              value="ajouter"
+              class="btn btn-primary btn-primary-sm"
+            />
+          </form>
+        </div>
+      </div>
+    </div>
+
+
+{% endblock  %}
+
+

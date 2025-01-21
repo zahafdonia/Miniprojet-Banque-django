@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item active" aria-current="page">Clients</li>
+      </ol>
+    </nav>
+
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Liste des clients</h5>
+            <!-- Affichage des messages de succès ou d'erreur -->
+            {% if messages %}
+                <div class="alert alert-info" role="alert">
+                    {% for message in messages %}
+                        {{ message }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <!-- Table des clients -->
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Nom d'utilisateur</th>
+                        <th scope="col">Prénom</th>
+                        <th scope="col">Nom</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for client in clients %}
+                        <tr>
+                            <th scope="row">{{ forloop.counter }}</th>
+                            <td>{{ client.username }}</td>
+                            <td>{{ client.firstname }}</td>
+                            <td>{{ client.lastname }}</td>
+                            <td>{{ client.email }}</td>
+                            <td>
+                                <a href="{% url 'edit-client' client.id %}" class="btn btn-primary btn-sm">Modifier</a>
+                                <a href="{% url 'delete-client' client.id %}" class="btn btn-danger btn-sm"
+                                   onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce client ?');">Supprimer</a>
+                            </td>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <!-- Lien pour ajouter un nouveau client -->
+            <a href="{% url 'add-expenses' %}" class="btn btn-success">Ajouter un client</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10 col-sm-12">
+            {% include 'parties/-messages.html'%} {% csrf_token %}
+            <div class="card shadow-lg rounded-3 border-0">
+                <div class="card-header bg-primary text-white text-center py-3">
+                    <h4 class="mb-0">Rechercher un compte</h4>
+                </div>
+                <div class="card-body">
+                    <form method="get" action="{% url 'rechercher-compte' %}">
+                        <div class="mb-3">
+                            <label for="identifiant" class="form-label">Numéro du compte</label>
+                            {{ form.identifiant }}
+                        </div>
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">Rechercher</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Si un compte a été trouvé -->
+            {% if compte %}
+                <div class="mt-4">
+                    <div class="card shadow-lg rounded-3 border-0">
+                        <div class="card-header bg-success text-white text-center py-3">
+                            <h4 class="mb-0">Informations du compte</h4>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Identifiant :</strong> {{ compte.identifiant }}</p>
+                            <p><strong>Client :</strong> {{ compte.client.firstname }} {{ compte.client.lastname }}</p>
+                            <p><strong>Type :</strong> {{ compte.get_type_display }}</p>
+                            <p><strong>Solde :</strong> {{ compte.solde }} DT</p>
+                            <p><strong>Date d'ouverture :</strong> {{ compte.date_ouverture|date:"d/m/Y" }}</p>
+                        </div>
+                    </div>
+                </div>
+            {% elif compte is not None %}
+                <div class="mt-4">
+                    <div class="alert alert-warning text-center">
+                        Aucun compte trouvé avec ce numéro.
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
